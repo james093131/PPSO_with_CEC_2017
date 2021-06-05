@@ -128,31 +128,74 @@ class PPSO{
         void CEC_Results_Records(int NFE ,int MAX_NFE)
         {
             if( NFE == MAX_NFE*0.01)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[0] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.02)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[1] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.05)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[2] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.1)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[3] += Current_inf.Current_Best_Value;
+
+            }
             else if( NFE == MAX_NFE*0.2)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[4] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.3)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[5] += Current_inf.Current_Best_Value;
-            else if( NFE == MAX_NFE*0.4)
+
+            }
+            else if( NFE == MAX_NFE*0.4){
+                
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[6] += Current_inf.Current_Best_Value;   
+
+            }
             else if( NFE == MAX_NFE*0.5)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[7] += Current_inf.Current_Best_Value;
+
+            }
             else if( NFE == MAX_NFE*0.6)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[8] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.7)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[9] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.8)
+            {    
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[10] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*0.9)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[11] += Current_inf.Current_Best_Value;
+            }
             else if( NFE == MAX_NFE*1.0)
+            {
+                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[12] += Current_inf.Current_Best_Value;
+            }
 
             
         }
@@ -329,7 +372,7 @@ class PPSO{
                         Fuzzy_coef.Fi_coef[i][0] = 0;
 
                     //unvaried
-                    if(PSO_inf.phi[i] >= -1 && PSO_inf.phi[i] < ( -0.0025) )
+                    if(PSO_inf.phi[i] >= -1 && PSO_inf.phi[i] < (-0.0025) )
                         Fuzzy_coef.Fi_coef[i][1] = 0;
                     else if(PSO_inf.phi[i] >= -0.025  && PSO_inf.phi[i] < 0 )  
                         Fuzzy_coef.Fi_coef[i][1] = (-0.025-PSO_inf.phi[i])/-0.025;
@@ -344,7 +387,7 @@ class PPSO{
                     else if(PSO_inf.phi[i] >= 0  && PSO_inf.phi[i] < 1 )
                         Fuzzy_coef.Fi_coef[i][2] = PSO_inf.phi[i] ;
                     else if(PSO_inf.phi[i] == 1 )
-                        Fuzzy_coef.Fi_coef[i][0] = 1;  
+                        Fuzzy_coef.Fi_coef[i][2] = 1;  
 
 
                     //delta
@@ -524,11 +567,13 @@ class PPSO{
                         
 
                         PSO_inf.Velocity[i][j] = Fuzzy_coef.Inerlia[i] * PSO_inf.Velocity[i][j]\
-                        +Fuzzy_coef.Cognitive[i] * r1 *(Personal_inf.Personal_Best_Coordinate[i][j]-PSO_inf.Particle[i][j])\
-                        +Fuzzy_coef.Social[i] * r2 *(Current_inf.Current_Best_Coordinate[j] -PSO_inf.Particle[i][j]);
+                        +Fuzzy_coef.Cognitive[i] * r1 *(Personal_inf.Personal_Best_Coordinate[i][j] - PSO_inf.Particle[i][j] )\
+                        +Fuzzy_coef.Social[i] * r2 *(Current_inf.Current_Best_Coordinate[j] - PSO_inf.Particle[i][j] );
 
                         if(PSO_inf.Velocity[i][j] > 0.2*(max-min))
                             PSO_inf.Velocity[i][j] = 0.2*(max-min);
+                        else if(PSO_inf.Velocity[i][j] < -0.2*(max-min))
+                            PSO_inf.Velocity[i][j] = -0.2*(max-min);
                     }
                 }
             }
