@@ -560,11 +560,11 @@ class PPSO{
             {
                 for(int i=0;i<pop;i++)
                 {
-                    double r1 = (1 - 0) * rand() / (RAND_MAX + 1.0) + 0;
-                    double r2 = (1 - 0) * rand() / (RAND_MAX + 1.0) + 0;
+                    
                     for(int j=0;j<DIM;j++)
                     {
-                        
+                        double r1 = (1 - 0) * rand() / (RAND_MAX + 1.0) + 0;
+                        double r2 = (1 - 0) * rand() / (RAND_MAX + 1.0) + 0;
 
                         PSO_inf.Velocity[i][j] = Fuzzy_coef.Inerlia[i] * PSO_inf.Velocity[i][j]\
                         +Fuzzy_coef.Cognitive[i] * r1 *(Personal_inf.Personal_Best_Coordinate[i][j] - PSO_inf.Particle[i][j] )\
