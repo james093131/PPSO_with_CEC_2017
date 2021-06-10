@@ -1,3 +1,4 @@
 ./*.txt
 CEC_2017/*/*.txt
 RUN_RESULT/*/*.txt
+*.txt
