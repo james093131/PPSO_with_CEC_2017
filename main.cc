@@ -7,19 +7,19 @@ int main(int argc,const char *argv[])
     int DIM = atoi(argv[3]);
     int Function_Number = atoi(argv[4]);
     int MAX_NFE = atoi(argv[5]);
-
+    double Record_Coef = atof(argv[6]);
 
     
     if( argc > 1 )
     {
         PPSO ppso;
-        ppso.Run(run, MAX_NFE,pop,DIM,Function_Number);
+        ppso.Run(run, MAX_NFE,pop,DIM,Function_Number,Record_Coef);
     }
       
     else 
     {
         PPSO ppso;
-        ppso.Run(1,100000,200,10,1);
+        ppso.Run(1,100000,200,10,1,0.3);
 
     }
    

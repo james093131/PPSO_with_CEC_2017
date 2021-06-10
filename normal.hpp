@@ -35,7 +35,7 @@ class PPSO{
         d1d Each_Run_Result;
 
     public:
-        void Run(int run,int MAX_NFE,int pop,int DIM,int FunctionNumber)
+        void Run(int run,int MAX_NFE,int pop,int DIM,int FunctionNumber,double Record_coef)
         {   
             srand( time(NULL) );
             INI_RUN(run);
@@ -51,7 +51,7 @@ class PPSO{
                 {
                     RANDOM_INI(DIM,i,PSO_inf.Particle,PSO_inf.Objective);
                 }
-                Evaluation(pop,DIM,FunctionNumber);
+                Evaluation(pop,DIM,FunctionNumber,Record_coef);
 
                 while( NFE < MAX_NFE)
                 {
@@ -64,13 +64,13 @@ class PPSO{
 
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
-                    Evaluation(pop,DIM,FunctionNumber);
+                    Evaluation(pop,DIM,FunctionNumber,Record_coef);
 
                   
-                    CEC_Results_Records(NFE,MAX_NFE);
+                    CEC_Results_Records(FunctionNumber,DIM,NFE,MAX_NFE);
                 } 
                 
-                CEC_Results_Records(NFE,MAX_NFE);
+                CEC_Results_Records(FunctionNumber,DIM,NFE,MAX_NFE);
 
                 Each_Run_Result[r] = Current_inf.Current_Best_Value;
                 r++;
@@ -82,6 +82,11 @@ class PPSO{
 
         }
         private:
+            struct Record
+            {
+                d2d Particle;
+                d2d temp;
+            };
             struct PSO_Parameter
             {
                 d2d Particle;
@@ -116,6 +121,7 @@ class PPSO{
             Personal_best Personal_inf;
             PSO_Parameter PSO_inf;
             Fuzzy Fuzzy_coef;
+            Record record;
 
             double max = 100.0;
             double min = -100.0;
@@ -125,76 +131,88 @@ class PPSO{
       
 
         private:
-        void CEC_Results_Records(int NFE ,int MAX_NFE)
+        void CEC_Results_Records(int F,int DIM,int NFE ,int MAX_NFE)
         {
             if( NFE == MAX_NFE*0.01)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[0] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,1);
             }
             else if( NFE == MAX_NFE*0.02)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[1] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,2);
             }
             else if( NFE == MAX_NFE*0.05)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[2] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,3);
             }
             else if( NFE == MAX_NFE*0.1)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[3] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,4);
 
             }
             else if( NFE == MAX_NFE*0.2)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[4] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,5);
             }
             else if( NFE == MAX_NFE*0.3)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[5] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,6);
 
             }
             else if( NFE == MAX_NFE*0.4){
                 
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[6] += Current_inf.Current_Best_Value;   
-
+                Record_Point_output(F,DIM,7);
             }
             else if( NFE == MAX_NFE*0.5)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[7] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,8);
 
             }
             else if( NFE == MAX_NFE*0.6)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[8] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,9);
             }
             else if( NFE == MAX_NFE*0.7)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[9] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,10);
             }
             else if( NFE == MAX_NFE*0.8)
             {    
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[10] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,11);
             }
             else if( NFE == MAX_NFE*0.9)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[11] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,12);
             }
             else if( NFE == MAX_NFE*1.0)
             {
                 cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
                 Each_Run_Evaluation_Best[12] += Current_inf.Current_Best_Value;
+                Record_Point_output(F,DIM,13);
             }
 
             
@@ -260,6 +278,12 @@ class PPSO{
 
                 Fuzzy_coef.Cognitive.clear();
                 Fuzzy_coef.Cognitive.swap(Fuzzy_coef.Cognitive);
+
+                record.temp.clear();
+                record.temp.swap(record.temp);
+
+                record.Particle.clear();
+                record.Particle.swap(record.Particle);
 
                 PSO_inf.Particle.assign(pop,d1d(DIM));
                 PSO_inf.Velocity.assign(pop,d1d(DIM,0));
@@ -588,15 +612,19 @@ class PPSO{
                     }
                 }
             }
-            void Evaluation(int pop,int DIM,int F)
+            void Evaluation(int pop,int DIM,int F,double Record_Coef)
             {
                 for(int i=0;i<pop;i++)
                 {   
                      
                     PSO_inf.Previous_Objective[i] = PSO_inf.Objective[i];
                     cec17_test_func(&PSO_inf.Particle[i][0], &PSO_inf.Objective[i], DIM, 1, F);
+                    record.temp.push_back(PSO_inf.Particle[i]);
                     NFE++;
-
+                    if (NFE%100==0)
+                    {
+                        Record_point(Record_Coef);
+                    }
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])
                     {
                         Personal_inf.Personal_Best_Value[i] = PSO_inf.Objective[i];
@@ -618,6 +646,39 @@ class PPSO{
                     
                 }
             }
+
+        void Record_point(double Record_Coef)
+        {   
+            int T = 0;
+            while(T < int(Record_Coef*100) )
+            {
+                int ind = rand() % (record.temp.size()-1 - 0 + 1) + 0;
+                record.Particle.push_back(record.temp[ind]);
+                record.temp.erase(record.temp.begin()+ ind );
+                T++;
+            }
+            record.temp.clear();
+            record.temp.swap(record.temp);
+
+        }
+        void Record_Point_output(int F,int DIM,int num)
+        {
+            fstream file; 
+            string DIR = "./Record_RESULT/";        
+            string A = DIR+to_string(DIM)+"D/"+to_string(F)+"/"+to_string(num)+"_Record_Classify.txt";
+            file.open(A,ios::out);
+            
+            // file << record.Particle.size()<<endl;
+            for(int i=0;i<record.Particle.size();i++)
+            {
+                // file << record.Particle[i].size()<<endl;
+                for(int j=0;j<record.Particle[i].size();j++)
+                {
+                    file << record.Particle[i][j]<<' ';
+                }
+                file <<endl;
+            }
+        }
         void CEC_Classify(int F,double START,double END,double RUN_BEST,double RUN_AVG,int DIM)
         {
             fstream file;           
