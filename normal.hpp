@@ -585,6 +585,11 @@ class PPSO{
                     {
                        PSO_inf.Previous_Particle[i][j] =  PSO_inf.Particle[i][j];
                        PSO_inf.Particle[i][j] += PSO_inf.Velocity[i][j] ;
+
+                        if(PSO_inf.Particle[i][j] >max)
+                            PSO_inf.Particle[i][j] = max;
+                        else if(PSO_inf.Particle[i][j] < min)
+                            PSO_inf.Particle[i][j] = min;
                     }
                 }
             }
