@@ -64,9 +64,8 @@ class PPSO{
 
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
+                    Find_Boundaries(pop,DIM);
                     Evaluation(pop,DIM,FunctionNumber);
-
-                  
                     CEC_Results_Records(NFE,MAX_NFE);
                 } 
                 
@@ -111,12 +110,16 @@ class PPSO{
                 d1d Social;
                 d1d Cognitive;
             };
-           
+            struct Boundaries
+            {
+                d1d min;
+                d1d max;
+            };
             Current_best Current_inf;
             Personal_best Personal_inf;
             PSO_Parameter PSO_inf;
             Fuzzy Fuzzy_coef;
-
+            Boundaries boundaries;
             double max = 100.0;
             double min = -100.0;
             double Current_Worst_Value;
@@ -261,6 +264,11 @@ class PPSO{
                 Fuzzy_coef.Cognitive.clear();
                 Fuzzy_coef.Cognitive.swap(Fuzzy_coef.Cognitive);
 
+                boundaries.max.clear();
+                boundaries.max.swap( boundaries.max);
+                boundaries.min.clear();
+                boundaries.max.swap( boundaries.min);
+
                 PSO_inf.Particle.assign(pop,d1d(DIM));
                 PSO_inf.Velocity.assign(pop,d1d(DIM,0));
                 PSO_inf.Objective.resize(pop);
@@ -287,6 +295,9 @@ class PPSO{
                 Fuzzy_coef.Inerlia.resize(pop,0);
                 Fuzzy_coef.Social.resize(pop,0);
                 Fuzzy_coef.Cognitive.resize(pop,0);
+
+                boundaries.max.resize(DIM,max);
+                boundaries.min.resize(DIM,min);
 
                 Delta_MAX = 0;
                 for(int i=0;i<DIM;i++)
@@ -587,11 +598,31 @@ class PPSO{
                        PSO_inf.Particle[i][j] += PSO_inf.Velocity[i][j] ;
 
                         if(PSO_inf.Particle[i][j] >max)
-                            PSO_inf.Particle[i][j] = max;
+                            PSO_inf.Particle[i][j] = boundaries.max[i];
                         else if(PSO_inf.Particle[i][j] < min)
-                            PSO_inf.Particle[i][j] = min;
+                            PSO_inf.Particle[i][j] = boundaries.min[i];
                     }
                 }
+            }
+            void Find_Boundaries(int pop,int DIM)
+            {
+                d1d temp_min(DIM,max);
+                d1d temp_max(DIM,min);
+                for(int i=0;i<pop;i++)
+                {
+                    for(int j=0;j<DIM;j++)
+                    {
+                       if(Personal_inf.Personal_Best_Coordinate[i][j] < temp_min[j])
+                            temp_min[j] = Personal_inf.Personal_Best_Coordinate[i][j];
+ 
+                      
+                        else if(Personal_inf.Personal_Best_Coordinate[i][j] > temp_max[j])
+                            temp_max[j] = Personal_inf.Personal_Best_Coordinate[i][j];
+                    }
+                }
+                boundaries.max = temp_max;
+                boundaries.min = temp_min;
+
             }
             void Evaluation(int pop,int DIM,int F)
             {
