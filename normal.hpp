@@ -51,7 +51,7 @@ class PPSO{
                 {
                     RANDOM_INI(DIM,i,PSO_inf.Particle,PSO_inf.Objective);
                 }
-                Evaluation(pop,DIM,FunctionNumber,Record_coef);
+                Evaluation(pop,DIM,FunctionNumber,Record_coef,MAX_NFE);
 
                 while( NFE < MAX_NFE)
                 {
@@ -64,13 +64,14 @@ class PPSO{
 
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
-                    Evaluation(pop,DIM,FunctionNumber,Record_coef);
+                    // Find_Boundaries(pop,DIM);
+                    Evaluation(pop,DIM,FunctionNumber,Record_coef,MAX_NFE);
 
                   
-                    CEC_Results_Records(FunctionNumber,DIM,NFE,MAX_NFE);
+                    // CEC_Results_Records(FunctionNumber,DIM,NFE,MAX_NFE);
                 } 
                 
-                CEC_Results_Records(FunctionNumber,DIM,NFE,MAX_NFE);
+                // CEC_Results_Records(FunctionNumber,DIM,NFE,MAX_NFE);
 
                 Each_Run_Result[r] = Current_inf.Current_Best_Value;
                 r++;
@@ -116,12 +117,17 @@ class PPSO{
                 d1d Social;
                 d1d Cognitive;
             };
-           
+            struct Boundaries
+            {
+                d1d min;
+                d1d max;
+            };
             Current_best Current_inf;
             Personal_best Personal_inf;
             PSO_Parameter PSO_inf;
             Fuzzy Fuzzy_coef;
             Record record;
+            Boundaries boundaries;
 
             double max = 100.0;
             double min = -100.0;
@@ -279,6 +285,11 @@ class PPSO{
                 Fuzzy_coef.Cognitive.clear();
                 Fuzzy_coef.Cognitive.swap(Fuzzy_coef.Cognitive);
 
+                boundaries.max.clear();
+                boundaries.max.swap( boundaries.max);
+                boundaries.min.clear();
+                boundaries.max.swap( boundaries.min);
+
                 record.temp.clear();
                 record.temp.swap(record.temp);
 
@@ -312,6 +323,9 @@ class PPSO{
                 Fuzzy_coef.Social.resize(pop,0);
                 Fuzzy_coef.Cognitive.resize(pop,0);
 
+                boundaries.max.resize(DIM,max);
+                boundaries.min.resize(DIM,min);
+                
                 Delta_MAX = 0;
                 for(int i=0;i<DIM;i++)
                 {
@@ -352,7 +366,7 @@ class PPSO{
                    DIS += pow( (PSO_inf.Particle[index][i]-global[i]) ,2);
                 }
 
-                DIS =sqrt(DIS);
+                DIS = sqrt(DIS);
 
                 DIS /= Delta_MAX;
 
@@ -483,7 +497,10 @@ class PPSO{
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
 
-                    Fuzzy_coef.Inerlia[i] = temp1/temp2;
+                     if(temp1 == 0.0 || temp2 == 0.0 )
+                        Fuzzy_coef.Inerlia[i] = 0.0;
+                    else
+                        Fuzzy_coef.Inerlia[i] = temp1/temp2;
                 }
             }
             void Set_Social(int pop)
@@ -530,7 +547,10 @@ class PPSO{
                         temp2 += Fuzzy_coef.Delta_coef[i][2];
                     }
 
-                    Fuzzy_coef.Social[i] = temp1/temp2;
+                    if(temp1 == 0.0 || temp2 == 0.0 )
+                        Fuzzy_coef.Social[i] = 0.0;
+                    else
+                        Fuzzy_coef.Social[i] = temp1/temp2;
                 }
             }
              void Set_Cognitive(int pop)
@@ -575,8 +595,10 @@ class PPSO{
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
                     
-
-                    Fuzzy_coef.Cognitive[i] = temp1/temp2;
+                    if(temp1 == 0.0 || temp2 == 0.0 )
+                        Fuzzy_coef.Cognitive[i] = 0.0;
+                    else
+                        Fuzzy_coef.Cognitive[i] = temp1/temp2;
                 }
             }
 
@@ -607,17 +629,38 @@ class PPSO{
                 {
                     for(int j=0;j<DIM;j++)
                     {
-                        PSO_inf.Previous_Particle[i][j] =  PSO_inf.Particle[i][j];
-                        PSO_inf.Particle[i][j] += PSO_inf.Velocity[i][j] ;
+                       PSO_inf.Previous_Particle[i][j] =  PSO_inf.Particle[i][j];
+                       PSO_inf.Particle[i][j] += PSO_inf.Velocity[i][j] ;
 
                         if(PSO_inf.Particle[i][j] >max)
-                            PSO_inf.Particle[i][j] = max;
+                            PSO_inf.Particle[i][j] = boundaries.max[j];
                         else if(PSO_inf.Particle[i][j] < min)
-                            PSO_inf.Particle[i][j] = min;
+                            PSO_inf.Particle[i][j] = boundaries.min[j];
+                       
                     }
                 }
             }
-            void Evaluation(int pop,int DIM,int F,double Record_Coef)
+            void Find_Boundaries(int pop,int DIM)
+            {
+                d1d temp_min(DIM,max);
+                d1d temp_max(DIM,min);
+                for(int i=0;i<pop;i++)
+                {
+                    for(int j=0;j<DIM;j++)
+                    {
+                       if(Personal_inf.Personal_Best_Coordinate[i][j] < temp_min[j])
+                            temp_min[j] = Personal_inf.Personal_Best_Coordinate[i][j];
+ 
+                      
+                        else if(Personal_inf.Personal_Best_Coordinate[i][j] > temp_max[j])
+                            temp_max[j] = Personal_inf.Personal_Best_Coordinate[i][j];
+                    }
+                }
+                boundaries.max = temp_max;
+                boundaries.min = temp_min;
+
+            }
+            void Evaluation(int pop,int DIM,int F,double Record_Coef,int MAX_NFE)
             {
                 for(int i=0;i<pop;i++)
                 {   
@@ -630,6 +673,7 @@ class PPSO{
                     {
                         Record_point(Record_Coef);
                     }
+                    CEC_Results_Records( F, DIM, NFE , MAX_NFE);
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])
                     {
                         Personal_inf.Personal_Best_Value[i] = PSO_inf.Objective[i];
@@ -641,7 +685,7 @@ class PPSO{
                             Current_inf.Current_Best_Coordinate.assign(PSO_inf.Particle[i].begin(),PSO_inf.Particle[i].end());
                         }
                     }
-
+                    
 
                     if ( PSO_inf.Objective[i] > Current_Worst_Value )
                     {
