@@ -470,7 +470,10 @@ class PPSO{
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
 
-                    Fuzzy_coef.Inerlia[i] = temp1/temp2;
+                    if(temp2 ==0)
+                        Fuzzy_coef.Inerlia[i] = 0.0;
+                    else
+                        Fuzzy_coef.Inerlia[i] = temp1/temp2;
                 }
             }
             void Set_Social(int pop)
@@ -516,8 +519,10 @@ class PPSO{
                         temp1 += Fuzzy_coef.Delta_coef[i][2]*3.0;
                         temp2 += Fuzzy_coef.Delta_coef[i][2];
                     }
-
-                    Fuzzy_coef.Social[i] = temp1/temp2;
+                    if(temp2 ==0)
+                        Fuzzy_coef.Social[i] = 0.0;
+                    else
+                        Fuzzy_coef.Social[i] = temp1/temp2;
                 }
             }
              void Set_Cognitive(int pop)
@@ -562,8 +567,10 @@ class PPSO{
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
                     
-
-                    Fuzzy_coef.Cognitive[i] = temp1/temp2;
+                    if(temp2 ==0)
+                        Fuzzy_coef.Cognitive[i] = 0.0;
+                    else
+                        Fuzzy_coef.Cognitive[i] = temp1/temp2;
                 }
             }
 
@@ -598,9 +605,9 @@ class PPSO{
                        PSO_inf.Particle[i][j] += PSO_inf.Velocity[i][j] ;
 
                         if(PSO_inf.Particle[i][j] >max)
-                            PSO_inf.Particle[i][j] = boundaries.max[i];
+                            PSO_inf.Particle[i][j] = boundaries.max[j];
                         else if(PSO_inf.Particle[i][j] < min)
-                            PSO_inf.Particle[i][j] = boundaries.min[i];
+                            PSO_inf.Particle[i][j] = boundaries.min[j];
                     }
                 }
             }
