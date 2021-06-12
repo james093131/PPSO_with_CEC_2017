@@ -64,7 +64,7 @@ class PPSO{
 
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
-                    // Find_Boundaries(pop,DIM);
+                    Find_Boundaries(pop,DIM);
                     Evaluation(pop,DIM,FunctionNumber,Record_coef,MAX_NFE);
 
                   

@@ -1,5 +1,5 @@
 
- j=3
+ j=1
    for (( j; j<31; j=j+1 ))
    do
         echo $j
