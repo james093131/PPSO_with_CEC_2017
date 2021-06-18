@@ -13,7 +13,7 @@
 #include <iomanip>
 
 
-#include "cec17_test_func.c"
+#include "cec21_test_func.cpp"
 
 using namespace std;
 
@@ -631,13 +631,60 @@ class PPSO{
                 boundaries.min = temp_min;
 
             }
+            double cec21_fitness_error(int F,double K)
+            {
+                switch(F)
+                {
+                    case 1:	
+                        K-=100.0;
+                        return K;
+                        break;
+                    case 2:	
+                        K-=1100.0;
+                        return K;
+                        break;
+                    case 3:
+                        K-=700.0;
+                        return K;
+                        break;
+                    case 4: 
+                        K-=1900.0;
+                        return K;
+                        break;
+                    case 5:
+                        K-=1700.0;
+                        return K;
+                        break;
+                    case 6:
+                        K-=1600.0;
+                        return K;
+                        break;
+                    case 7:
+                        K-=2100.0;
+                        return K;
+                        break;
+                    case 8:
+                        K-=2200.0;
+                        return K;
+                        break;
+                    case 9:
+                        K-=2400.0;
+                        return K;
+                        break;
+                    case 10:
+                        K-=2500.0;
+                        return K;
+                        break;
+                }
+            }
             void Evaluation(int pop,int DIM,int F)
             {
                 for(int i=0;i<pop;i++)
                 {   
                      
                     PSO_inf.Previous_Objective[i] = PSO_inf.Objective[i];
-                    cec17_test_func(&PSO_inf.Particle[i][0], &PSO_inf.Objective[i], DIM, 1, F);
+                    cec21_basic_func(&PSO_inf.Particle[i][0], &PSO_inf.Objective[i], DIM, 1, F);
+                    PSO_inf.Objective[i] = cec21_fitness_error(F,PSO_inf.Objective[i]);
                     NFE++;
 
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])
@@ -676,7 +723,7 @@ class PPSO{
             file.open(A,ios::out);
             for(int i=0;i<run;i++)
             {
-                file<<Each_Run_Result[i]-F*100<<endl;
+                file<<Each_Run_Result[i]<<endl;
 
             }
         }
@@ -693,8 +740,8 @@ class PPSO{
                     BEST = Each_Run_Result[i];
             }
             AVG /= run;
-            AVG  -= Function*100;
-            BEST -= Function*100;
+            // AVG  -= Function*100;
+            // BEST -= Function*100;
             
             cout<<"# CEC Testing Function : "<<Function<<endl;
             cout<<"# Run : "<<run<<endl;
