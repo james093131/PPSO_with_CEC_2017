@@ -681,10 +681,10 @@ class PPSO{
             {
                 for(int i=0;i<pop;i++)
                 {   
-                     
+                    
                     PSO_inf.Previous_Objective[i] = PSO_inf.Objective[i];
-                    cec21_basic_func(&PSO_inf.Particle[i][0], &PSO_inf.Objective[i], DIM, 1, F);
-                    PSO_inf.Objective[i] = cec21_fitness_error(F,PSO_inf.Objective[i]);
+                    cec21_bias_shift_rot_func(&PSO_inf.Particle[i][0], &PSO_inf.Objective[i], DIM, 1, F);
+                    // PSO_inf.Objective[i] = cec21_fitness_error(F,PSO_inf.Objective[i]);
                     NFE++;
 
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])
