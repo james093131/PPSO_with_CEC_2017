@@ -35,7 +35,7 @@ class PPSO{
         d1d Each_Run_Result;
 
     public:
-        void Run(int run,int MAX_NFE,int pop,int DIM,int FunctionNumber)
+        void Run(int run,int MAX_NFE,int pop,int DIM,int FunctionNumber,int FunctionTransform)
         {   
             srand( time(NULL) );
             INI_RUN(run);
@@ -51,7 +51,7 @@ class PPSO{
                 {
                     RANDOM_INI(DIM,i,PSO_inf.Particle,PSO_inf.Objective);
                 }
-                Evaluation(pop,DIM,FunctionNumber);
+                Evaluation(pop,DIM,FunctionNumber,FunctionTransform);
 
                 while( NFE < MAX_NFE)
                 {
@@ -65,7 +65,7 @@ class PPSO{
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
                     Find_Boundaries(pop,DIM);
-                    Evaluation(pop,DIM,FunctionNumber);
+                    Evaluation(pop,DIM,FunctionNumber,FunctionTransform);
                     CEC_Results_Records(NFE,MAX_NFE);
                 } 
                 
@@ -75,7 +75,7 @@ class PPSO{
                 r++;
             }
             END = clock();
-            OUTPUT(DIM,FunctionNumber,MAX_NFE,run,START,END);
+            OUTPUT(DIM,FunctionNumber,FunctionTransform,MAX_NFE,run,START,END);
 
             
 
@@ -677,14 +677,53 @@ class PPSO{
                         break;
                 }
             }
-            void Evaluation(int pop,int DIM,int F)
+            void cec21_cal(d1d &P,double &Obj,int DIM,int F,int F_T)
+            {
+                if(F_T == 1)
+                {
+                    cec21_basic_func(&P[0],&Obj,DIM,1,F);   
+                }
+                else if(F_T==2)
+                {
+                    cec21_bias_func(&P[0],&Obj,DIM,1,F);
+                    // cec21_fitness_error(Obj,F);
+                }
+                else if(F_T==3)
+                {
+                    cec21_shift_func(&P[0],&Obj,DIM,1,F);
+                }
+                else if(F_T==4)
+                {
+                    cec21_rot_func(&P[0],&Obj,DIM,1,F);
+                }
+                else if(F_T==5)
+                {
+                    cec21_bias_shift_func(&P[0],&Obj,DIM,1,F);
+                    // cec21_fitness_error(Obj,F);
+                }
+                else if(F_T==6)
+                {
+                    cec21_bias_rot_func(&P[0],&Obj,DIM,1,F);
+                    // cec21_fitness_error(Obj,F);
+                }
+                else if(F_T==7)
+                {
+                    cec21_shift_rot_func(&P[0],&Obj,DIM,1,F);   
+                }
+                else if(F_T==8)
+                {
+                    cec21_bias_shift_rot_func(&P[0],&Obj,DIM,1,F);
+                    // cec21_fitness_error(Obj,F);
+                }
+                    
+            }
+            void Evaluation(int pop,int DIM,int F,int F_T)
             {
                 for(int i=0;i<pop;i++)
                 {   
                     
                     PSO_inf.Previous_Objective[i] = PSO_inf.Objective[i];
-                    cec21_bias_shift_rot_func(&PSO_inf.Particle[i][0], &PSO_inf.Objective[i], DIM, 1, F);
-                    // PSO_inf.Objective[i] = cec21_fitness_error(F,PSO_inf.Objective[i]);
+                    cec21_cal(PSO_inf.Particle[i], PSO_inf.Objective[i], DIM,F,F_T);
                     NFE++;
 
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])
@@ -708,18 +747,18 @@ class PPSO{
                     
                 }
             }
-        void CEC_Classify(int F,double START,double END,double RUN_BEST,double RUN_AVG,int DIM)
+        void CEC_Classify(int F,int F_T,double START,double END,double RUN_STD,double RUN_AVG,int DIM)
         {
             fstream file;           
-            string A = "PPSO_2017_CEC_Classify"+to_string(DIM)+".txt";
+            string A = "PPSO_2021_CEC_Classify"+to_string(DIM)+".txt";
             file.open(A,ios::app);
-            file<<F<<' '<<RUN_BEST<<' '<<RUN_AVG<<' '<<(END - START) / CLOCKS_PER_SEC<<endl;
+            file<<F<<' '<<F_T<<' '<<RUN_AVG<<' '<<RUN_STD<<' '<<(END - START) / CLOCKS_PER_SEC<<endl;
         }
-        void Run_Classify(int F,int run,int DIM)
+        void Run_Classify(int F,int F_T,int run,int DIM)
         {
             fstream file; 
             string DIR = "./RUN_RESULT/";        
-            string A = DIR+to_string(DIM)+"D/"+to_string(F)+"_Run_Classify.txt";
+            string A = DIR+to_string(DIM)+"D/"+to_string(F)+"_"+to_string(F_T)+"_Run_Classify.txt";
             file.open(A,ios::out);
             for(int i=0;i<run;i++)
             {
@@ -727,31 +766,36 @@ class PPSO{
 
             }
         }
-        void OUTPUT(int DIM,int Function,int MAX_NFE,int run,double START,double END)
+        void OUTPUT(int DIM,int Function,int F_T,int MAX_NFE,int run,double START,double END)
         {
            
-            double BEST =DBL_MAX;
-            double AVG  = 0;
+            double STD = 0;
+            double AVG = 0;
             for(int i=0;i<run;i++)
             {
                 AVG+= Each_Run_Result[i];
 
-                if(Each_Run_Result[i] < BEST)
-                    BEST = Each_Run_Result[i];
+               
             }
             AVG /= run;
-            // AVG  -= Function*100;
-            // BEST -= Function*100;
+   
+            for(int i=0;i<run;i++)
+            {
+                STD += pow(Each_Run_Result[i]-AVG,2);
+                STD /= run;
+                STD = sqrt(STD);
+            }
             
             cout<<"# CEC Testing Function : "<<Function<<endl;
+            cout<<"# CEC Transform : "<<F_T<<endl;
             cout<<"# Run : "<<run<<endl;
             cout<<"# Evaluation : "<<MAX_NFE<<endl;
             cout<<"# Dimension : "<<DIM<<endl;
-            cout<<"# Best Objective Value "<<endl<<BEST<<endl;
-            cout<<"# Average Objective Value "<<endl<<AVG<<endl;
+            cout<<"# Average Objective Value :"<<endl<<AVG<<endl;
+            cout<<"# Std :"<<endl<<STD<<endl;
             cout<<"# Execution Time :"<<endl<<(END - START) / CLOCKS_PER_SEC<<"(s)"<<endl;
-            CEC_Classify(Function,START,END,BEST,AVG,DIM);
-            Run_Classify(Function,run,DIM);
+            CEC_Classify(Function,F_T,START,END,STD,AVG,DIM);
+            Run_Classify(Function,F_T,run,DIM);
         }
     
 };
