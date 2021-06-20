@@ -1,4 +1,4 @@
-# PPSO_with_CEC_2017
+# PPSO_with_CEC_2021
 The implementation of PPSO.
 
 
@@ -18,12 +18,12 @@ The implementation of PPSO.
 
 This Algorithm is from Proactive Particles in Swarm Optimization: a Settings-Free Algorithm for Real-Parameter Single Objective Optimization Problems in 2017 IEEE Congress on Evolutionary Computation (CEC)
 
-And the implementation is evaluated the performance of PPSO on the CEC 2017 - Benchmark Function.
+And the implementation is evaluated the performance of PPSO on the CEC 2021 - Single Objective Bound Constrained Numerical Optimization.
 
-These Function are from Problem Definitions and Evaluation Criteria for the CEC 2017 Special Session and Competition on Single Objective Real-Parameter Numerical Optimization.
+These Function are from Problem Definitions and Evaluation Criteria for the CEC 2021 Special Session and Competition on Single Objective Bound Constrained Numerical Optimization.
 
 
-Final the cec17_test_func.cc is from the github (https://github.com/lacerdamarcelo/cec17_python)
+Final the cec21_test_func.cpp is from the github (https://github.com/P-N-Suganthan/2021-SO-BCO)
 
 
 
