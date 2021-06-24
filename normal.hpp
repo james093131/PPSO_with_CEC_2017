@@ -215,6 +215,7 @@ class PPSO{
         }
         void INI(int DIM,int pop)
             {
+                cout << scientific << setprecision(8);
                 PSO_inf.Particle.clear();
                 PSO_inf.Particle.swap(PSO_inf.Particle);
 
@@ -752,6 +753,7 @@ class PPSO{
             fstream file;           
             string A = "PPSO_2021_CEC_Classify"+to_string(DIM)+".txt";
             file.open(A,ios::app);
+            file << scientific << setprecision(2);
             file<<F<<' '<<F_T<<' '<<RUN_AVG<<' '<<RUN_STD<<' '<<(END - START) / CLOCKS_PER_SEC<<endl;
         }
         void Run_Classify(int F,int F_T,int run,int DIM)
@@ -760,6 +762,7 @@ class PPSO{
             string DIR = "./RUN_RESULT/";        
             string A = DIR+to_string(DIM)+"D/"+to_string(F)+"_"+to_string(F_T)+"_Run_Classify.txt";
             file.open(A,ios::out);
+            file << scientific << setprecision(2);
             for(int i=0;i<run;i++)
             {
                 file<<Each_Run_Result[i]<<endl;

@@ -6,7 +6,7 @@ do
      for (( j; j<11; j=j+1 ))
      do
           echo $i $j
-          ./PPSO 30 160 10 $j $i 200000 >> CEC_2021/10D/PPSO_CEC_${j}_${i}.txt
+          ./PPSO 30 160 10 $j $i 200000 >> 10D/PPSO_CEC_${j}_${i}.txt
      done
      j=1
 done
