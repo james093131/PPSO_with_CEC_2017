@@ -1,3 +1,6 @@
+// #include "CEC21.hpp"
+#include "CEC17.hpp"
+
 typedef vector<char> c1d;
 typedef vector<c1d> c2d;
 typedef vector<c2d> c3d;
@@ -10,11 +13,9 @@ typedef vector<double>d1d;
 typedef vector<d1d> d2d;
 typedef vector<d2d> d3d;
 typedef vector<d3d> d4d;
+// class PPSO : CEC21{
+class PPSO : CEC17{
 
-
-#include "CEC21.hpp"
-
-class PPSO : CEC21{
     public:
         d1d Each_Run_Evaluation_Best;
         d1d Each_Run_Result;
@@ -51,10 +52,13 @@ class PPSO : CEC21{
                     Update_Position(pop,DIM);
                     Find_Boundaries(pop,DIM);
                     Evaluation(pop,DIM,FunctionNumber,FunctionTransform);
-                    CEC_Results_Records(NFE,MAX_NFE);
+                    CEC17::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
+                    // CEC21::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
+
                 } 
                 
-                CEC_Results_Records(NFE,MAX_NFE);
+                CEC17::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
+                // CEC21::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
 
                 Each_Run_Result[r] = Current_inf.Current_Best_Value;
                 r++;
@@ -113,80 +117,6 @@ class PPSO : CEC21{
       
 
         private:
-        void CEC_Results_Records(int NFE ,int MAX_NFE)
-        {
-            if( NFE == MAX_NFE*0.01)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[0] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.02)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[1] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.05)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[2] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.1)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[3] += Current_inf.Current_Best_Value;
-
-            }
-            else if( NFE == MAX_NFE*0.2)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[4] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.3)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[5] += Current_inf.Current_Best_Value;
-
-            }
-            else if( NFE == MAX_NFE*0.4){
-                
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[6] += Current_inf.Current_Best_Value;   
-
-            }
-            else if( NFE == MAX_NFE*0.5)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[7] += Current_inf.Current_Best_Value;
-
-            }
-            else if( NFE == MAX_NFE*0.6)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[8] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.7)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[9] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.8)
-            {    
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[10] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*0.9)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[11] += Current_inf.Current_Best_Value;
-            }
-            else if( NFE == MAX_NFE*1.0)
-            {
-                cout<<NFE<<' '<<Current_inf.Current_Best_Value<<endl;
-                Each_Run_Evaluation_Best[12] += Current_inf.Current_Best_Value;
-            }
-
-            
-        }
         void RANDOM_INI(int DIM,int index,d2d &arr,d1d &objective)
         {
             
@@ -620,7 +550,8 @@ class PPSO : CEC21{
                 {   
                     
                     PSO_inf.Previous_Objective[i] = PSO_inf.Objective[i];
-                    CEC21::cec21_cal(&PSO_inf.Particle[i][0], PSO_inf.Objective[i], DIM,F,F_T);
+                    // CEC21::cec21_cal(&PSO_inf.Particle[i][0], PSO_inf.Objective[i], DIM,F,F_T);
+                    CEC17::cec17_cal(&PSO_inf.Particle[i][0], PSO_inf.Objective[i], DIM,F);
                     NFE++;
 
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])
@@ -673,8 +604,10 @@ class PPSO : CEC21{
             cout<<"# Average Objective Value :"<<endl<<AVG<<endl;
             cout<<"# Std :"<<endl<<STD<<endl;
             cout<<"# Execution Time :"<<endl<<(END - START) / CLOCKS_PER_SEC<<"(s)"<<endl;
-            CEC21::CEC_Classify(Function,F_T,START,END,STD,AVG,DIM);
-            CEC21::Run_Classify(&Each_Run_Result[0],Function,F_T,run,DIM);
+            // CEC21::CEC_Classify(Function,START,END,STD,AVG,DIM);
+            CEC17::CEC_Classify(Function,START,END,STD,AVG,DIM);
+            // CEC21::Run_Classify(&Each_Run_Result[0],Function,run,DIM);
+            CEC17::CEC_Classify(Function,START,END,STD,AVG,DIM);
         }
     
 };
