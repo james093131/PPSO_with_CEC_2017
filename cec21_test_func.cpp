@@ -99,7 +99,7 @@ void cec21_basic_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d_nr.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d_nr.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -128,7 +128,7 @@ void cec21_basic_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d_ns.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d_ns.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -174,7 +174,7 @@ void cec21_basic_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -283,7 +283,7 @@ void cec21_bias_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d_nr.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d_nr.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -312,7 +312,7 @@ void cec21_bias_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d_ns.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d_ns.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -358,7 +358,7 @@ void cec21_bias_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -477,7 +477,7 @@ void cec21_bias_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -506,7 +506,7 @@ void cec21_bias_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d_ns.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d_ns.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -552,7 +552,7 @@ void cec21_bias_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -670,7 +670,7 @@ void cec21_bias_shift_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d_nr.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d_nr.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -699,7 +699,7 @@ void cec21_bias_shift_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -745,7 +745,7 @@ void cec21_bias_shift_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -863,7 +863,7 @@ void cec21_bias_shift_rot_func(double *x, double *f, int nx, int mx,int func_num
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -892,7 +892,7 @@ void cec21_bias_shift_rot_func(double *x, double *f, int nx, int mx,int func_num
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -938,7 +938,7 @@ void cec21_bias_shift_rot_func(double *x, double *f, int nx, int mx,int func_num
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -1056,7 +1056,7 @@ void cec21_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -1085,7 +1085,7 @@ void cec21_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d_ns.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d_ns.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -1131,7 +1131,7 @@ void cec21_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -1238,7 +1238,7 @@ void cec21_shift_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d_nr.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d_nr.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -1267,7 +1267,7 @@ void cec21_shift_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -1313,7 +1313,7 @@ void cec21_shift_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -1420,7 +1420,7 @@ void cec21_shift_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 
 		/* Load Matrix M*/
-		sprintf(FileName, "input_data/M_%d_D%d.txt", func_num,nx);
+		sprintf(FileName, "CEC2021/input_data/M_%d_D%d.txt", func_num,nx);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -1449,7 +1449,7 @@ void cec21_shift_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		fclose(fpt);
 		
 		/* Load shift_data */
-		sprintf(FileName, "input_data/shift_data_%d.txt", func_num);
+		sprintf(FileName, "CEC2021/input_data/shift_data_%d.txt", func_num);
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -1495,7 +1495,7 @@ void cec21_shift_rot_func(double *x, double *f, int nx, int mx,int func_num)
 		
 		if (func_num>=5&&func_num<=7)
 		{
-			sprintf(FileName, "input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			sprintf(FileName, "CEC2021/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
