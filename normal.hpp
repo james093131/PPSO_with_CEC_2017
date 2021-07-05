@@ -48,9 +48,10 @@ class PPSO : CEC17{
                     Set_Inertia(pop);
                     Set_Social(pop);
                     Set_Cognitive(pop);
-                    Find_Boundaries(pop,DIM);
+
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
+                    Find_Boundaries(pop,DIM);
                     Evaluation(pop,DIM,FunctionNumber,FunctionTransform);
                     CEC17::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
                     // CEC21::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
@@ -253,7 +254,7 @@ class PPSO : CEC17{
                    DIS += pow( (PSO_inf.Particle[index][i]-global[i]) ,2);
                 }
 
-                DIS =sqrt(DIS);
+                DIS = sqrt(DIS);
 
                 DIS /= Delta_MAX;
 
@@ -434,7 +435,7 @@ class PPSO : CEC17{
                         temp2 += Fuzzy_coef.Delta_coef[i][2];
                     }
 
-                    if(temp2 == 0)
+                    if(temp2 == 0.0)
                         Fuzzy_coef.Social[i] = 0.0;
                     else
                         Fuzzy_coef.Social[i] = temp1/temp2;
@@ -482,7 +483,7 @@ class PPSO : CEC17{
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
                     
-                    if(temp2 == 0)
+                    if(temp2 == 0.0)
                         Fuzzy_coef.Cognitive[i] = 0.0;
                     else
                         Fuzzy_coef.Cognitive[i] = temp1/temp2;
@@ -503,10 +504,14 @@ class PPSO : CEC17{
                         +Fuzzy_coef.Cognitive[i] * r1 *(Personal_inf.Personal_Best_Coordinate[i][j] - PSO_inf.Particle[i][j] )\
                         +Fuzzy_coef.Social[i] * r2 *(Current_inf.Current_Best_Coordinate[j] - PSO_inf.Particle[i][j] );
 
-                        if(PSO_inf.Velocity[i][j] > 0.2*(boundaries.max[j]-boundaries.min[j]))
-                            PSO_inf.Velocity[i][j] = 0.2*(boundaries.max[j]-boundaries.min[j]);
-                        else if(PSO_inf.Velocity[i][j] < -0.2*(boundaries.max[j]-boundaries.min[j]))
-                            PSO_inf.Velocity[i][j] = -0.2*(boundaries.max[j]-boundaries.min[j]);
+                        // if(PSO_inf.Velocity[i][j] > 0.2*(boundaries.max[j]-boundaries.min[j]))
+                        //     PSO_inf.Velocity[i][j] = 0.2*(boundaries.max[j]-boundaries.min[j]);
+                        // else if(PSO_inf.Velocity[i][j] < -0.2*(boundaries.max[j]-boundaries.min[j]))
+                        //     PSO_inf.Velocity[i][j] = -0.2*(boundaries.max[j]-boundaries.min[j]);
+                        if(PSO_inf.Velocity[i][j] > 0.2*(max - min))
+                            PSO_inf.Velocity[i][j] = 0.2*(max - min);
+                        else if(PSO_inf.Velocity[i][j] < -0.2*(max - min))
+                            PSO_inf.Velocity[i][j] = -0.2*(max - min);
                     }
                 }
             }
@@ -519,7 +524,7 @@ class PPSO : CEC17{
                        PSO_inf.Previous_Particle[i][j] =  PSO_inf.Particle[i][j];
                        PSO_inf.Particle[i][j] += PSO_inf.Velocity[i][j] ;
 
-                        if(PSO_inf.Particle[i][j] >max)
+                        if(PSO_inf.Particle[i][j] > max)
                             PSO_inf.Particle[i][j] = boundaries.max[j];
                         else if(PSO_inf.Particle[i][j] < min)
                             PSO_inf.Particle[i][j] = boundaries.min[j];
@@ -553,7 +558,7 @@ class PPSO : CEC17{
                     
                     PSO_inf.Previous_Objective[i] = PSO_inf.Objective[i];
                     // CEC21::cec21_cal(&PSO_inf.Particle[i][0], PSO_inf.Objective[i], DIM,F,F_T);
-                    CEC17::cec17_cal(&PSO_inf.Particle[i][0], PSO_inf.Objective[i], DIM,F);
+                    CEC17::cec17_cal(&PSO_inf.Particle[i][0],&PSO_inf.Objective[i], DIM,F);
                     NFE++;
 
                     if(PSO_inf.Objective[i] < Personal_inf.Personal_Best_Value[i])

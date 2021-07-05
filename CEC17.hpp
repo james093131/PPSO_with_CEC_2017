@@ -90,10 +90,10 @@ class CEC17{
 
             
     }
-    void cec17_cal(double *P,double &Obj,int DIM,int F)
+    void cec17_cal(double *P,double *Obj,int DIM,int F)
     {
-        cec17_test_func(&P[0], &Obj, DIM,1,F);
-        Obj -= F*100.0;
+        cec17_test_func(&P[0], &Obj[0], DIM,1,F);
+        Obj[0] -= F*100.0;
     }
 
     void CEC_Classify(int F,double START,double END,double RUN_STD,double RUN_AVG,int DIM)
