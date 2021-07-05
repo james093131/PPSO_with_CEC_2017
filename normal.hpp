@@ -13,6 +13,7 @@ typedef vector<double>d1d;
 typedef vector<d1d> d2d;
 typedef vector<d2d> d3d;
 typedef vector<d3d> d4d;
+
 // class PPSO : CEC21{
 class PPSO : CEC17{
 
@@ -23,7 +24,7 @@ class PPSO : CEC17{
     public:
         void Run(int run,int MAX_NFE,int pop,int DIM,int FunctionNumber,int FunctionTransform)
         {   
-            srand( time(NULL) );
+	        srand((unsigned)time(NULL));
             INI_RUN(run);
             int r = 0;
             double START,END;
@@ -47,10 +48,9 @@ class PPSO : CEC17{
                     Set_Inertia(pop);
                     Set_Social(pop);
                     Set_Cognitive(pop);
-
+                    Find_Boundaries(pop,DIM);
                     Update_Velocity(pop,DIM);
                     Update_Position(pop,DIM);
-                    Find_Boundaries(pop,DIM);
                     Evaluation(pop,DIM,FunctionNumber,FunctionTransform);
                     CEC17::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
                     // CEC21::CEC_Results_Records(NFE,MAX_NFE,Current_inf.Current_Best_Value,&Each_Run_Evaluation_Best[0]);
@@ -123,7 +123,8 @@ class PPSO : CEC17{
       
             for(int i=0;i<DIM;i++)
             {
-                double a = ((float(rand()) / float(RAND_MAX)) * (max - min)) + min;
+                double a = (max - min) * rand() / (RAND_MAX + 1.0) + min;
+
                 arr[index][i] = a;
             }
 
@@ -185,7 +186,7 @@ class PPSO : CEC17{
                 PSO_inf.Particle.assign(pop,d1d(DIM));
                 PSO_inf.Velocity.assign(pop,d1d(DIM,0));
                 PSO_inf.Objective.resize(pop);
-                PSO_inf.Previous_Particle.assign(pop,d1d(DIM,0));
+                PSO_inf.Previous_Particle.assign(pop,d1d(DIM,DBL_MAX));
                 PSO_inf.Previous_Objective.resize(pop,0);
                 PSO_inf.delta.resize(pop);
                 PSO_inf.phi.resize(pop);
@@ -377,13 +378,13 @@ class PPSO : CEC17{
                     }
 
                     //rule3
-                    if(Fuzzy_coef.Fi_coef[i][0] != 0 )
+                    else if(Fuzzy_coef.Fi_coef[i][0] != 0 )
                     {
                         temp1 += Fuzzy_coef.Fi_coef[i][0]*1.0;
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
 
-                    if(temp2 ==0)
+                    if(temp2 == 0)
                         Fuzzy_coef.Inerlia[i] = 0.0;
                     else
                         Fuzzy_coef.Inerlia[i] = temp1/temp2;
@@ -432,7 +433,8 @@ class PPSO : CEC17{
                         temp1 += Fuzzy_coef.Delta_coef[i][2]*3.0;
                         temp2 += Fuzzy_coef.Delta_coef[i][2];
                     }
-                    if(temp2 ==0)
+
+                    if(temp2 == 0)
                         Fuzzy_coef.Social[i] = 0.0;
                     else
                         Fuzzy_coef.Social[i] = temp1/temp2;
@@ -480,7 +482,7 @@ class PPSO : CEC17{
                         temp2 += Fuzzy_coef.Fi_coef[i][0];
                     }
                     
-                    if(temp2 ==0)
+                    if(temp2 == 0)
                         Fuzzy_coef.Cognitive[i] = 0.0;
                     else
                         Fuzzy_coef.Cognitive[i] = temp1/temp2;
@@ -494,17 +496,17 @@ class PPSO : CEC17{
                     
                     for(int j=0;j<DIM;j++)
                     {
-                        double r1 = (1 - 0) * rand() / (RAND_MAX + 1.0) + 0;
-                        double r2 = (1 - 0) * rand() / (RAND_MAX + 1.0) + 0;
+                        double r1 = (1.0 - 0.0) * rand() / (RAND_MAX + 1.0) + 0.0;
+                        double r2 = (1.0 - 0.0) * rand() / (RAND_MAX + 1.0) + 0.0;
 
                         PSO_inf.Velocity[i][j] = Fuzzy_coef.Inerlia[i] * PSO_inf.Velocity[i][j]\
                         +Fuzzy_coef.Cognitive[i] * r1 *(Personal_inf.Personal_Best_Coordinate[i][j] - PSO_inf.Particle[i][j] )\
                         +Fuzzy_coef.Social[i] * r2 *(Current_inf.Current_Best_Coordinate[j] - PSO_inf.Particle[i][j] );
 
-                        if(PSO_inf.Velocity[i][j] > 0.2*(max-min))
-                            PSO_inf.Velocity[i][j] = 0.2*(max-min);
-                        else if(PSO_inf.Velocity[i][j] < -0.2*(max-min))
-                            PSO_inf.Velocity[i][j] = -0.2*(max-min);
+                        if(PSO_inf.Velocity[i][j] > 0.2*(boundaries.max[j]-boundaries.min[j]))
+                            PSO_inf.Velocity[i][j] = 0.2*(boundaries.max[j]-boundaries.min[j]);
+                        else if(PSO_inf.Velocity[i][j] < -0.2*(boundaries.max[j]-boundaries.min[j]))
+                            PSO_inf.Velocity[i][j] = -0.2*(boundaries.max[j]-boundaries.min[j]);
                     }
                 }
             }
@@ -604,10 +606,10 @@ class PPSO : CEC17{
             cout<<"# Average Objective Value :"<<endl<<AVG<<endl;
             cout<<"# Std :"<<endl<<STD<<endl;
             cout<<"# Execution Time :"<<endl<<(END - START) / CLOCKS_PER_SEC<<"(s)"<<endl;
-            // CEC21::CEC_Classify(Function,START,END,STD,AVG,DIM);
+            // CEC21::CEC_Classify(Function,F_T,START,END,STD,AVG,DIM);
             CEC17::CEC_Classify(Function,START,END,STD,AVG,DIM);
-            // CEC21::Run_Classify(&Each_Run_Result[0],Function,run,DIM);
-            CEC17::CEC_Classify(Function,START,END,STD,AVG,DIM);
+            // CEC21::Run_Classify(&Each_Run_Result[0],Function,F_T,run,DIM);
+            CEC17::Run_Classify(&Each_Run_Result[0],Function,run,DIM);
         }
     
 };

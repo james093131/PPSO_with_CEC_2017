@@ -101,7 +101,7 @@ class CEC21{
             else if(F_T==2)
             {
                 cec21_bias_func(&P[0],&Obj,DIM,1,F);
-                // cec21_fitness_error(Obj,F);
+                Obj = cec21_fitness_error(Obj,F);
             }
             else if(F_T==3)
             {
@@ -114,12 +114,12 @@ class CEC21{
             else if(F_T==5)
             {
                 cec21_bias_shift_func(&P[0],&Obj,DIM,1,F);
-                // cec21_fitness_error(Obj,F);
+                Obj = cec21_fitness_error(Obj,F);
             }
             else if(F_T==6)
             {
             cec21_bias_rot_func(&P[0],&Obj,DIM,1,F);
-                // cec21_fitness_error(Obj,F);
+                Obj = cec21_fitness_error(Obj,F);
             }
             else if(F_T==7)
             {
@@ -128,7 +128,7 @@ class CEC21{
             else if(F_T==8)
             {
                 cec21_bias_shift_rot_func(&P[0],&Obj,DIM,1,F);
-                // cec21_fitness_error(Obj,F);
+                Obj = cec21_fitness_error(Obj,F);
             }
                 
         }

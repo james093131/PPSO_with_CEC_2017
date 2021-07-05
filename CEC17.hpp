@@ -101,7 +101,7 @@ class CEC17{
         fstream file;           
         string A = "PPSO_2017_CEC_Classify"+to_string(DIM)+".txt";
         file.open(A,ios::app);
-        file << scientific << setprecision(2);
+        file << scientific << setprecision(8);
         file<<F<<' '<<' '<<RUN_AVG<<' '<<RUN_STD<<' '<<(END - START) / CLOCKS_PER_SEC<<endl;
     }
     void Run_Classify(double *Run_Result,int F,int run,int DIM)
@@ -110,11 +110,10 @@ class CEC17{
         string DIR = "./17_RUN_RESULT/";        
         string A = DIR+to_string(DIM)+"D/"+to_string(F)+"_Run_Classify.txt";
         file.open(A,ios::out);
-        file << scientific << setprecision(2);
+        file << scientific << setprecision(8);
         for(int i=0;i<run;i++)
         {
             file<<Run_Result[i]<<endl;
-
         }
     }
 };
